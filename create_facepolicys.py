@@ -18,7 +18,7 @@ def create_device(uri, headers, num, userid):
     # 添加设备
     for i in range(1, num+1):
         body = {"deviceSerial": "face_"+str(i), "deviceCnName": "face_"+str(i), "deviceEnName": "", "deviceSecret": "", "deviceIP": "101", "devicePort": "", "desc": "", "productType": "12", "deviceType": "2", "deviceVersion": "101", "deviceTag": "", "externalDid": "", "deviceUri": "rtsp://10.151.5.160:8554/yangling/face_1", "deviceConnType": "", "deviceProtocol": "",
-                "matchingThreshold": "", "streamWidth": 1920, "streamHeight": 1080, "faceAttribute": "1", "livenessCheck": "1", "ingressQCThreshold": "", "frameRate": "", "boundingBoxSizeThreshold": "", "bkImageStorage": "1", "targetGroup": "", "validRegionDefinition": [], "privilege": "", "operatePerson": str(userid), "ingressAngleThreshold": ""}
+                "matchingThreshold": "", "streamWidth": 1920, "streamHeight": 1080, "faceAttribute": "0", "livenessCheck": "0", "ingressQCThreshold": "", "frameRate": "", "boundingBoxSizeThreshold": "", "bkImageStorage": "0", "targetGroup": "", "validRegionDefinition": [], "privilege": "", "operatePerson": str(userid), "ingressAngleThreshold": ""}
         res = requests.post(url='https://' + uri + '/DEVICE/device/create',
                             headers=headers, verify=False, json=body).json()
         print(str(i)+"创建设备---------------->:"+str(res))
@@ -29,10 +29,12 @@ def create_device(uri, headers, num, userid):
 def create_policy(uri, headers, list_ids, userid):
     for _id in list_ids:
         body = {"desc": "facepo_"+_id, "deviceScope": "", "eventType": "", "monitorPeriodEnd": "", "monitorPeriodStart": "", "operatePerson": str(userid), "policyActions": [{"actionContent": "111", "actionTarget": "11111111111", "actionType": "3"}], "policyDevices": [{"deviceId": _id, "deviceSerial": "", "deviceType": "2"}], "policyId": "", "policyName": "facepo_"+_id, "policyTargets": [
-            {"targetValue": "6", "operator": "2", "classId": "0", "targetId": "0"}], "policyType": "0", "rollingCount": "", "rollingWindow": "", "consecutiveWindow": "", "consecutiveCount": "", "targetScope": "", "validPeriodEnd": "", "validPeriodStart": "", "monitorPeriodWeekday": ""}
+            {"targetValue": "8", "operator": "2", "classId": "0", "targetId": "0"}], "policyType": "0", "rollingCount": "", "rollingWindow": "", "consecutiveWindow": "", "consecutiveCount": "", "targetScope": "", "validPeriodEnd": "", "validPeriodStart": "", "monitorPeriodWeekday": ""}
         res = requests.post(url='https://' + uri + '/POLICYMONITOR/faceMonitoringPolicy/create',
                             headers=headers, verify=False, json=body).json()
         print("创建策略---------------->:"+str(res))
+
+#陌生人 "targetValue": "-99"  人员组 填组id
 
 
 def delete_devices(uri, headers, keyword, userid):
@@ -80,13 +82,16 @@ def get_userid(uri, headers):
 
 
 if __name__ == '__main__':
-    uri = "www.studio78.com"
+    uri = "www.studio79.com"
     headers = auth_head(uri)
     userid = get_userid(uri, headers)
-    # list_ids = create_device(uri, headers, 10, userid)
-    # create_policy(uri, headers, list_ids, userid)
-    # time.sleep(5)
-    # time.sleep(30*60)
-    delete_devices(uri, headers, "face", userid)
-    delete_policys(uri, headers, "face", userid)
+    list_ids = create_device(uri, headers, 1, userid)
+    create_policy(uri, headers, list_ids, userid)
+    # time.sleep(60)
+    #time.sleep(30*60)
+    # print(uri)
+    # headers = auth_head(uri)
+    # userid = get_userid(uri, headers)
+    # delete_devices(uri, headers, "face", userid)
+    # delete_policys(uri, headers, "face", userid)
     print('end')

@@ -22,8 +22,8 @@ def create_tasks (uri,headers,num):
     
     #执行视频
     for i in range(1,num+1):
-        time.sleep(3)
-        body = {"taskId":"roiIntrusion"+str(i),"processor":"roiIntrusion","video":"/images/4h7minroi_1h_"+str(num)+".mp4","type": 2,"rtspHeight": 1080,"rtspWidth": 1920,"interval": 3,"threshold": 0.5,"minSize": 22}
+        time.sleep(1)
+        body = {"taskId":"harpyPCBP"+str(i),"processor":"harpyPCBP","video":"/images/3h12min_15fps_h265_"+str(num)+".mp4","type": 0,"rtspHeight": 1080,"rtspWidth": 1920,"interval": 14,"threshold": 0.5,"minSize": 22}
         res = requests.post(url='https://'+ uri +'/APIPKG/apipkg/async/video/analysis', headers=headers,verify=False,json=body).json()
         print(str(i)+"执行视频---------------->:"+str(res))
 def delete_tasks(uri,headers,num):
@@ -40,8 +40,8 @@ def auth_head(uri):
     print(type(headers))
     return headers
 if __name__ == '__main__':
-    uri = "www.studio217.com"
+    uri = "www.studio157.com"
     headers = auth_head(uri)
-    create_tasks(uri,headers,16)
+    create_tasks(uri,headers,5)
     #delete_tasks(uri,headers,17)
     print('end')
