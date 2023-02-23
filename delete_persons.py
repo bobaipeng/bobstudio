@@ -11,16 +11,17 @@ requests.packages.urllib3.disable_warnings()
 import logging
 log = logging.getLogger(__name__)
 
+uri = "www.studio195.com"
 
-
-def delete_persons(uri,headers,userid,name):
-    body = {"sts":"0","current":1,"size":20000,"cnName":"wname","idNumber":"","documentId":"","lastModTsEnd":"","lastModTsStart":""}
-    res = requests.post(url='https://'+ uri +'/PERSON/person/pageList', headers=headers,verify=False,json=body).json()
+def test_delete_persons(studioHeaders):
+    userid = get_userid(uri, studioHeaders)
+    body = {"sts":"0","current":1,"size":20000,"cnName":"1","idNumber":"","documentId":"","lastModTsEnd":"","lastModTsStart":""}
+    res = requests.post(url='https://'+ uri +'/PERSON/person/pageList', headers=studioHeaders,verify=False,json=body).json()
     
     #删除person
     for _person in res['data']:
         body = {"uidList":[ _person['uid'] ],"operatePerson":str(userid)}
-        res = requests.post(url='https://'+ uri +'/PERSON/person/deactivate', headers=headers,verify=False,json=body).json()
+        res = requests.post(url='https://'+ uri +'/PERSON/person/deactivate', headers=studioHeaders,verify=False,json=body).json()
         print("删除人员---------------->:"+_person['uid'])
 def auth_head(uri):
     body ={"username":"autotest","password":"zsPQQvGXaduTogVTfvDicg==","accountType":"0"}
@@ -34,9 +35,3 @@ def get_userid(uri, headers):
     res = requests.get(url='https://' + uri + "/GUNS/mgr/isLogin",
                        headers=headers, verify=False).json()
     return res['data']['user']['id']
-if __name__ == '__main__':
-    uri = "www.studio95.com"
-    headers = auth_head(uri)
-    userid = get_userid(uri, headers)
-    delete_persons(uri,headers,userid,'wname')
-    print('end')
